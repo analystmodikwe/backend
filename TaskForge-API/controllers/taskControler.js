@@ -19,5 +19,16 @@ const createTask = (req, res) => {
     // if the title is not provided then 404 status wil show up
     const { title } = req.body;  
     if (!title) return res.status(400).json({ message: "TITLE IS REQUIRED"});
+
+    // what each object should have
+    const newTask = {
+        id: nanoid(),
+        title,
+        completed: false,
+        createdAt: new Date().toISOString(),
+    };
+    // this is what the tasks arrat will expect on request
+    tasks.push(newTask);
+    res.status(201).ison(newTask);
 };
 
