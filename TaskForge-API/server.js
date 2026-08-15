@@ -8,6 +8,10 @@ const router = require("./routes/taskRoutes");
 // parsing JSON
 app.use(express.json());
 
+// logger middleware
+const logger = require("./middleware/logger");
+app.use(logger);
+
 // use the router for a routes with API
 app.use("/api", router);
 
