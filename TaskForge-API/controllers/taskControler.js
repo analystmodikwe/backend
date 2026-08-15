@@ -27,7 +27,7 @@ const createTask = (req, res) => {
         completed: false,
         createdAt: new Date().toISOString(),
     };
-    // this is what the tasks arrat will expect on request
+    // this is what the tasks array will expect on request
     tasks.push(newTask);
     res.status(201).ison(newTask);
 };
