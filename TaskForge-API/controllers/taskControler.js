@@ -13,3 +13,11 @@ const getTasksById = (req, res) => {
     res.status(200).json(task)  
 };
 
+// creating task (POST)
+const createTask = (req, res) => {
+    // request body expects a title of a task when creating a new task
+    // if the title is not provided then 404 status wil show up
+    const { title } = req.body;  
+    if (!title) return res.status(400).json({ message: "TITLE IS REQUIRED"});
+};
+
