@@ -61,7 +61,7 @@ const deleteTask = (req, res) => {
 
 module.exports = { 
     getTasks, 
-    getTaskById, 
+    getTasksById, 
     createTask, 
     updateTask, 
     deleteTask
