@@ -12,7 +12,7 @@ const tasks = [
     },
 
     // task2 with missing tite on purpose to see if the error handling actually works or not
-        {
+    {
         id: nanoid(),
         
         completed: false,
