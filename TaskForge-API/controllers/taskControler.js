@@ -60,7 +60,7 @@ const deleteTask = (req, res) => {
 };
 
 module.exports = { 
-    getAllTasks, 
+    getTasks, 
     getTaskById, 
     createTask, 
     updateTask, 
