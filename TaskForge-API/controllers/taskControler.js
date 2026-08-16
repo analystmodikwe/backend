@@ -3,7 +3,7 @@ const { readTasks, writeTasks } = require("../models/tasks");
 const verifyTask = require("../utils/verifyTask")
 
 // read all tasks(GET)
-const getTasks = (req, res, next) =>{
+const getTasks = async (req, res, next) => {
     try{
         const tasks = await readTasks();
     
