@@ -13,6 +13,7 @@ const getTasks = (req, res, next) =>{
     }
 };
 
+
 //  reading tasks by its id(GET/ID)
 const getTasksById = async (req, res, next) => {
 
@@ -30,6 +31,7 @@ const getTasksById = async (req, res, next) => {
         next(err);
     }   
 };
+
 
 // creating task (POST)
 const createTask = async (req, res, next) => {
