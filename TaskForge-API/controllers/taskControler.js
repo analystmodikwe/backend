@@ -88,14 +88,25 @@ const updateTask = async (req, res, next) =>{
 
 
 // deleteTask (DELETE)
-const deleteTask = (req, res) => {
-    // find the task by id and if the id does not exist send a 404 status
-    const index = tasks.findIndex(t => t.id ===req.params.id);
-    if (index === -1) return res.status(404).json({ message: "TASK NOT FOUND" });
+const deleteTask = async (req, res, next) => {
 
-    // it will remove one task from an array
-    tasks.splice(index, 1);
-    res.status(204).send();
+    try{
+        const tasks = await readTasks();
+        // find the task by id and if the id does not exist send a 404 status
+        const index = tasks.findIndex((t) => t.id === req.params.id);
+        if (index === -1) return res.status(404).json({ message: "TASK NOT FOUND" });
+
+        // it will remove one task from an array
+        tasks.splice(index, 1);
+
+        await writeTasks(tasks);
+
+        res.status(204).send();
+
+    } catch (err) {
+        next(err);
+    }
+    
 };
 
 //  function that will verify the task by its ID, and i used aync because await
