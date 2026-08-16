@@ -1,10 +1,16 @@
 const { nanoid } = require("nanoid");
-const tasks = require("../models/tasks");
+const { readTasks, writeTasks } = require("../models/tasks");
 const verifyTask = require("../utils/verifyTask")
 
 // read all tasks(GET)
-const getTasks = (req, res) =>{
-    res.json(tasks);
+const getTasks = (req, res, next) =>{
+    try{
+        const tasks = await readTasks ();
+    
+        res.status(200).json(tasks);
+    } catch (err) {
+        next(err);
+    }
 };
 
 //  reading tasks by its id(GET/ID)
