@@ -30,7 +30,7 @@ const createTask = (req, res) => {
     };
     // this is what the tasks array will expect on request
     tasks.push(newTask);
-    res.status(201).ison(newTask);
+    res.status(201).json(newTask);
 };
 
 // updating task(PUT)
