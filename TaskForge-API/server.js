@@ -13,6 +13,15 @@ errorHandler = require("./middleware/errorHandler");
 
 // parsing JSON
 app.use(express.json());
+
+// Catches malformed JSON thrown by express.json() before it reaches any route. when a client sends garbage JSON in the body
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    return res.status(400).json({ message: "Malformed JSON in request body" });
+  }
+  next(err);
+});
+
 // logger
 app.use(logger);
 // static files
