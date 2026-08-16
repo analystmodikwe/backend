@@ -14,10 +14,20 @@ const getTasks = (req, res, next) =>{
 };
 
 //  reading tasks by its id(GET/ID)
-const getTasksById = (req, res) => {
-    const task = tasks.find(t => t.id === req.params.id);
-    if (!task) return res.status(404).json({ message: "TASK IS NOT FOUND"});
-    res.status(200).json(task)  
+const getTasksById = async (req, res, next) => {
+    try{
+
+        // tasks will read readTasks
+        const tasks = await readTasks();
+
+        const task = tasks.find((t) => t.id === req.params.id);
+        
+        if (!task) return res.status(404).json({ message: "TASK IS NOT FOUND"});
+        res.status(200).json(task) 
+
+    } catch (err) {
+        next(err);
+    }   
 };
 
 // creating task (POST)
