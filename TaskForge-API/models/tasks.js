@@ -1,24 +1,19 @@
-const { nanoid } = require("nanoid");
+const fs = require("fs/promises");
+const path = require("path");
 
-// seeded data so that i have something to test and verify on
-const tasks = [
+// Path to our "database" file {tasks.json} — path.join keeps this working __dirname is a Node.js variable that represents the directory where the current JavaScript file is located.
+const dataPath = path.join(__dirname, "../data/tasks.json");
 
-    // task 1
-    {
-        id: nanoid(),
-        title: "Add animations to the app",
-        completed: false,
-        createdAt: new Date().toISOString,
-    },
+// reading the current task
+const readTasks = async () => {
+  const data = await fs.readFile(dataPath, "utf-8");
+  return JSON.parse(data);
+};
 
-    // task2 with missing tite on purpose to see if the error handling actually works or not
-    {
-        id: nanoid(),
-        
-        completed: false,
-        createdAt: new Date().toISOString,
-    },
+// Writes the full array back to disk. We always write the WHOLE array,
+// not append — simplest way to keep tasks.json valid JSON.
+const writeTasks = async (tasks) => {
+    await fs.writeFile(dataPath, JSON.stringify(tasks, null, 2));
+};
 
-];
-
-module.exports = tasks;
+module.exports = { readTasks, writeTasks };

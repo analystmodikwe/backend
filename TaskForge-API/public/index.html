@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskForge</title>
+</head>
+<body>
+  <h1>Tasks</h1>
+  <ul id="task-list"></ul>
+
+  <script>
+    // Fetch tasks from API and render them.
+    fetch("/api/tasks")
+      .then((res) => res.json())
+      .then((tasks) => {
+        const list = document.getElementById("task-list");
+        tasks.forEach((task) => {
+          const li = document.createElement("li");
+          li.textContent = `${task.title} — ${task.completed ? "done" : "pending"}`;
+          list.appendChild(li);
+        });
+      })
+      .catch((err) => console.error("Failed to load tasks:", err));
+  </script>
+</body>
+</html>

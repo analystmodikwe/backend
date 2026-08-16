@@ -5,6 +5,9 @@ const app = express();
 // for routes
 const router = require("./routes/taskRoutes");
 
+// static files
+app.use(express.static("public"));
+
 // parsing JSON
 app.use(express.json());
 
