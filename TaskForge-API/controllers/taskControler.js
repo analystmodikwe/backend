@@ -5,7 +5,7 @@ const verifyTask = require("../utils/verifyTask")
 // read all tasks(GET)
 const getTasks = (req, res, next) =>{
     try{
-        const tasks = await readTasks ();
+        const tasks = await readTasks();
     
         res.status(200).json(tasks);
     } catch (err) {
@@ -15,15 +15,16 @@ const getTasks = (req, res, next) =>{
 
 //  reading tasks by its id(GET/ID)
 const getTasksById = async (req, res, next) => {
+    
     try{
 
         // tasks will read readTasks
         const tasks = await readTasks();
 
         const task = tasks.find((t) => t.id === req.params.id);
-        
+
         if (!task) return res.status(404).json({ message: "TASK IS NOT FOUND"});
-        res.status(200).json(task) 
+        res.status(200).json(task);
 
     } catch (err) {
         next(err);
