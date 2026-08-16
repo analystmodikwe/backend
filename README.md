@@ -105,6 +105,4 @@ Manually tested with Postman — a collection covering all six routes (success a
 - `tasks.json` isn't safe for concurrent writes under real load; it's a learning-project stand-in for a proper database
 - No pagination on `GET /api/tasks` — fine for a handful of tasks, not built for scale
 
----
-
 Built as a four-stage backend project (routing → async → REST conventions & static files → centralized error handling)
