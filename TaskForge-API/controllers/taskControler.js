@@ -105,36 +105,30 @@ const deleteTask = async (req, res, next) => {
 
     } catch (err) {
         next(err);
-    }
-    
+    }   
 };
 
 //  function that will verify the task by its ID, and i used aync because await
 // is needed to verifyTask() inside it
 const verifyTaskById = async (req, res, next) => {
+  try {
+    const tasks = await readTasks();
+
     const task = tasks.find((t) => t.id === req.params.id);
+    if (!task) return res.status(404).json({ message: "Task not found" });
 
-    // if the task doesnt exist issue out the error message(404)
-    if (!task) {
-        return res.status(404).json({ message: "TASK NOT FOUND" });
+    // await will pause the function here without blocking the rest of the server until verifyTask delay finishes
+    const result = await verifyTask(task);
+    if (!result.valid) {
+      return res.status(422).json({ message: result.reason });
     }
 
-    try{
-        // await will pause the function here without blocking the rest of the server until verifyTask delay finishes
-        const result = await verifyTask(task);
+    res.status(200).json({ message: "Task verified successfully", task });
 
-        if (!result.valid) {
-
-            // 422 = found but fails validation
-            return res.status(422).json({ message:result.reason });
-        }
-
-        return res.status(200).json({ message:" TASK VERIFIED SUCCESSFULY", task });
-
-    } catch (err) {
-        // if verifyTask throws unexpectedly, there will stil be a response instead of letting the server hang or crash
-        next(err);
-    }
+  } catch (err) {
+     // if verifyTask throws unexpectedly, there will stil be a response instead of letting the server hang or crash
+    next(err);
+  }
 };
 
 module.exports = { 
