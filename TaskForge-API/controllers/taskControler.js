@@ -65,7 +65,7 @@ const createTask = async (req, res, next) => {
 
 
 // updating task(PUT)
-const updateTask = (req, res, next) =>{
+const updateTask = async (req, res, next) =>{
     try{
 
         const tasks = await readTasks();
