@@ -15,7 +15,7 @@ const getTasks = (req, res, next) =>{
 
 //  reading tasks by its id(GET/ID)
 const getTasksById = async (req, res, next) => {
-    
+
     try{
 
         // tasks will read readTasks
@@ -32,23 +32,35 @@ const getTasksById = async (req, res, next) => {
 };
 
 // creating task (POST)
-const createTask = (req, res) => {
-    // request body expects a title of a task when creating a new task
-    // if the title is not provided then 404 status wil show up
-    const { title } = req.body;  
-    if (!title) return res.status(400).json({ message: "TITLE IS REQUIRED"});
+const createTask = async (req, res, next) => {
 
-    // what each object should have
-    const newTask = {
-        id: nanoid(),
-        title,
-        completed: false,
-        createdAt: new Date().toISOString(),
-    };
-    // this is what the tasks array will expect on request
-    tasks.push(newTask);
-    res.status(201).json(newTask);
+    try{
+
+        // request body expects a title of a task when creating a new task
+        // if the title is not provided then 404 status wil show up
+        const { title } = req.body;  
+        if (!title) return res.status(400).json({ message: "TITLE IS REQUIRED"});
+
+        const tasks = await readTasks();
+
+        // what each object should have
+        const newTask = {
+            id: nanoid(),
+            title,
+            completed: false,
+            createdAt: new Date().toISOString(),
+        };
+        // this is what the tasks array will expect on request
+        tasks.push(newTask);
+        // persis to disk before responding
+        await writeTasks(tasks);
+
+        res.status(201).json(newTask);
+    } catch (err) {
+        next(err);
+    }
 };
+
 
 // updating task(PUT)
 const updateTask = (req, res) =>{
