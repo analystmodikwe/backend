@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "seed1",
+    "title": "Set up project repo",
+    "completed": false,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "seed2",
+    "completed": false,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  }
+]
