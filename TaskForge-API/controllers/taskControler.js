@@ -1,6 +1,7 @@
 const { nanoid } = require("nanoid");
 const { readTasks, writeTasks } = require("../models/tasks");
-const verifyTask = require("../utils/verifyTask")
+const verifyTask = require("../utils/verifyTask");
+const AppError = require("../utils/AppError");
 
 // read all tasks(GET)
 const getTasks = async (req, res, next) => {
@@ -24,7 +25,7 @@ const getTasksById = async (req, res, next) => {
 
         const task = tasks.find((t) => t.id === req.params.id);
 
-        if (!task) return res.status(404).json({ message: "TASK IS NOT FOUND"});
+        if (!task) return next(new AppError("Task not found", 404));
         res.status(200).json(task);
 
     } catch (err) {
@@ -41,7 +42,7 @@ const createTask = async (req, res, next) => {
         // request body expects a title of a task when creating a new task
         // if the title is not provided then 404 status wil show up
         const { title } = req.body;  
-        if (!title) return res.status(400).json({ message: "TITLE IS REQUIRED"});
+        if (!title) return next(new AppError("Title is required", 400));
 
         const tasks = await readTasks();
 
@@ -70,7 +71,7 @@ const updateTask = async (req, res, next) =>{
 
         const tasks = await readTasks();
         const task = tasks.find((t) => t.id === req.params.id);
-        if (!task) return res.status(404).json({ message: "TASK IS NOT FOUND"});
+        if (!task) return next(new AppError("Task not found", 404));
         
         // object destructuring to only extract tite and completed from the object
         const { title, completed } = req.body;
@@ -94,7 +95,7 @@ const deleteTask = async (req, res, next) => {
         const tasks = await readTasks();
         // find the task by id and if the id does not exist send a 404 status
         const index = tasks.findIndex((t) => t.id === req.params.id);
-        if (index === -1) return res.status(404).json({ message: "TASK NOT FOUND" });
+        if (index === -1) return next(new AppError("Task not found", 404));
 
         // it will remove one task from an array
         tasks.splice(index, 1);
@@ -115,13 +116,11 @@ const verifyTaskById = async (req, res, next) => {
     const tasks = await readTasks();
 
     const task = tasks.find((t) => t.id === req.params.id);
-    if (!task) return res.status(404).json({ message: "Task not found" });
+    if (!task) return next(new AppError("Task not found", 404));
 
     // await will pause the function here without blocking the rest of the server until verifyTask delay finishes
     const result = await verifyTask(task);
-    if (!result.valid) {
-      return res.status(422).json({ message: result.reason });
-    }
+    if (!result.valid) return next(new AppError(result.reason, 422));
 
     res.status(200).json({ message: "Task verified successfully", task });
 

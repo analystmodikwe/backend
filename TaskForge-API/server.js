@@ -4,19 +4,25 @@ const app = express();
 
 // for routes
 const router = require("./routes/taskRoutes");
+// logger middleware
+const logger = require("./middleware/logger");
+// errorHandler middleware
+errorHandler = require("./middleware/errorHandler");
 
-// static files
-app.use(express.static("public"));
+
 
 // parsing JSON
 app.use(express.json());
 
-// logger middleware
-const logger = require("./middleware/logger");
+// logger
 app.use(logger);
-
+// static files
+app.use(express.static("public"));
 // use the router for a routes with API
 app.use("/api", router);
+// errorhandler
+app.use(errorHandler);
+
 
 //  starting the server with a port 3500
 const PORT = 3500;
