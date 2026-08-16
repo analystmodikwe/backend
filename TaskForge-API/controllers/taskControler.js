@@ -1,5 +1,6 @@
 const { nanoid } = require("nanoid");
 const tasks = require("../models/tasks");
+const verifyTask = require("../utils/verifyTask")
 
 // read all tasks(GET)
 const getTasks = (req, res) =>{
@@ -29,7 +30,7 @@ const createTask = (req, res) => {
     };
     // this is what the tasks array will expect on request
     tasks.push(newTask);
-    res.status(201).ison(newTask);
+    res.status(201).json(newTask);
 };
 
 // updating task(PUT)
@@ -59,11 +60,40 @@ const deleteTask = (req, res) => {
     res.status(204).send();
 };
 
+//  function that will verify the task by its ID, and i used aync because await
+// is needed to verifyTask() inside it
+const verifyTaskById = async (req, res, next) => {
+    const task = tasks.find((t) => t.id === req.params.id);
+
+    // if the task doesnt exist issue out the error message(404)
+    if (!task) {
+        return res.status(404).json({ message: "TASK NOT FOUND" });
+    }
+
+    try{
+        // await will pause the function here without blocking the rest of the server until verifyTask delay finishes
+        const result = await verifyTask(task);
+
+        if (!result.valid) {
+
+            // 422 = found but fails validation
+            return res.status(422).json({ message:result.reason });
+        }
+
+        return res.status(200).json({ message:" TASK VERIFIED SUCCESSFULY", task });
+
+    } catch (err) {
+        // if verifyTask throws unexpectedly, there will stil be a response instead of letting the server hang or crash
+        next(err);
+    }
+};
+
 module.exports = { 
     getTasks, 
     getTasksById, 
     createTask, 
     updateTask, 
-    deleteTask
+    deleteTask,
+    verifyTaskById
 };
 

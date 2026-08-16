@@ -7,13 +7,14 @@ const {
     createTask, 
     updateTask, 
     deleteTask,
+    verifyTaskById
 } = require("../controllers/taskControler");
 
 router.get("/tasks", getTasks );
-router.get("/tasks", getTasksById);
+router.get("/tasks/:id/verify", verifyTaskById);
+router.get("/tasks/:id", getTasksById);
 router.post("/tasks", createTask );
-router.put("/tasks", updateTask);
-router.delete("/tasks", deleteTask);
-
+router.put("/tasks/:id", updateTask);
+router.delete("/tasks/:id", deleteTask);
 
 module.exports = router;
