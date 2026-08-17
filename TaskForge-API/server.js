@@ -27,6 +27,10 @@ app.use(errorHandler);
 //  starting the server with a port 3500
 const PORT = 3500;
 
-app.listen(PORT, () =>{
-    console.log(`this server is running on http://localhost:${PORT}/api/tasks`)
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`this server is running on http://localhost:${PORT}/api/tasks`);
+  });
+}
+
+module.exports = app;
