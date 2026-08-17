@@ -2,6 +2,8 @@ const express = require("express")
 
 const app = express();
 
+const path = require("path");
+
 // for routes
 const router = require("./routes/taskRoutes");
 // logger middleware
@@ -17,7 +19,7 @@ app.use(express.json());
 // logger
 app.use(logger);
 // static files
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 // use the router for a routes with API
 app.use("/api", router);
 // errorhandler
